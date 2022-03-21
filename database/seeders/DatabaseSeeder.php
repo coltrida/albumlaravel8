@@ -32,5 +32,15 @@ class DatabaseSeeder extends Seeder
                 Photo::factory(20)
             )
         )->create();
+
+        User::create([
+            'name' => 'cacao',
+            'email' => 'cacao@cacao.it',
+            'email_verified_at' => now(),
+            'password' => \Hash::make('123456'),
+            'remember_token' => 'sdafIOKKHy',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

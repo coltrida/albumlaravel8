@@ -30,15 +30,22 @@
                 </thead>
                 <tbody>
                 @foreach($albums as $album)
-                    <tr>
-                        <td>{{$album->album_name}}</td>
-                        <td>{{$album->album_thumb}}</td>
+                    <tr class="align-middle">
+                        <td>{{$album->album_name}} ( {{$album->id}} )</td>
+                        <td>
+                            @if($album->album_thumb)
+                                <img width="200" src="{{asset($album->path)}}" alt="">
+                            @endif
+                        </td>
                         <td>{{$album->description}}</td>
                         <td>{{$album->user_id}}</td>
-                        <td >
+                        <td width="300">
                             <div class="d-flex">
                                 <a class="btn btn-danger" href="{{route('albums.destroy', $album->id)}}">Delete</a>
                                 <a class="btn btn-primary" href="{{route('albums.edit', $album->id)}}">Update</a>
+                                @if($album->photos_count)
+                                    <a class="btn btn-success" href="{{route('albums.show', $album->id)}}">Images ({{$album->photos_count}})</a>
+                                @endif
                             </div>
                         </td>
                     </tr>

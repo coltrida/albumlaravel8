@@ -38,8 +38,22 @@ class Album extends Model
 
     protected $guarded=[];
 
+    public function getPathAttribute()
+    {
+        $url = $this->album_thumb;
+        if (stristr($this->album_thumb, 'http') === false){
+            $url = 'storage/'.$this->album_thumb;
+        }
+        return $url;
+    }
+
     public function photos()
     {
         return $this->hasMany(Photo::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

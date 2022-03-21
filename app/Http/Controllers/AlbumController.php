@@ -18,7 +18,7 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = Album::latest()->get();
+        $albums = Album::withCount('photos')->latest()->get();
         return view('album.index', compact('albums'));
     }
 
@@ -29,7 +29,8 @@ class AlbumController extends Controller
      */
     public function create()
     {
-        return view('album.createalbum');
+        $album = new Album();
+        return view('album.createalbum', compact('album'));
     }
 
     /**
@@ -40,7 +41,14 @@ class AlbumController extends Controller
      */
     public function store(Request $request)
     {
-        $res = Album::create($request->all());
+        $album = new Album();
+        $album->album_name = $request->album_name;
+        $album->description = $request->description;
+        $album->user_id = \Auth::user()->id;
+
+        $this->processFile($request, $album);
+
+        $res = $album->save();
         $message = $res ? "Album creato con succeesso" : 'Album non creato';
         $tipo = $res ? 'success' : 'danger';
         session()->flash('message', $message);
@@ -52,11 +60,12 @@ class AlbumController extends Controller
      * Display the specified resource.
      *
      * @param Album $album
-     * @return void
+     * @return Factory|View
      */
     public function show(Album $album)
     {
-        //
+        $alb = Album::with('photos')->find($album->id);
+        return view('photo.albumImages', compact('alb'));
     }
 
     /**
@@ -79,7 +88,12 @@ class AlbumController extends Controller
      */
     public function update(Request $request, Album $album)
     {
-        $res = $album->update($request->all());
+        $album->album_name = $request->input('album_name');
+        $album->description = $request->input('description');
+
+        $this->processFile($request, $album);
+
+        $res = $album->save();
         $message = $res ? "Album con id $album->id modificato" : 'Album non aggiornato';
         $tipo = $res ? 'success' : 'danger';
         session()->flash('message', $message);
@@ -95,6 +109,25 @@ class AlbumController extends Controller
      */
     public function destroy(Album $album)
     {
-        return $album->delete();
+        $thumbNail = $album->album_thumb;
+        $res = $album->delete();
+        if ($res && $thumbNail && \Storage::exists($thumbNail)){
+            \Storage::delete($thumbNail);
+        }
+        return $res;
+    }
+
+    /**
+     * @param Request $request
+     * @param Album $album
+     */
+    private function processFile(Request $request, Album &$album): void
+    {
+        if ($request->hasFile('album_thumb')) {
+            $file = $request->file('album_thumb');
+            $filename = $album->id . '.' . $file->extension();
+            $filenameWithPath = $file->storeAs(env('IMG_DIR'), $filename);
+            $album->album_thumb = $filenameWithPath;
+        }
     }
 }
