@@ -39,10 +39,11 @@
                         </td>
                         <td>{{$album->description}}</td>
                         <td>{{$album->user_id}}</td>
-                        <td width="300">
+                        <td width="350">
                             <div class="d-flex">
                                 <a class="btn btn-danger" href="{{route('albums.destroy', $album->id)}}">Delete</a>
-                                <a class="btn btn-primary" href="{{route('albums.edit', $album->id)}}">Update</a>
+                                <a class="btn btn-warning" href="{{route('albums.edit', $album->id)}}">Update</a>
+                                <a class="btn btn-primary" href="{{route('photos.create', $album->id)}}">New</a>
                                 @if($album->photos_count)
                                     <a class="btn btn-success" href="{{route('albums.show', $album->id)}}">Images ({{$album->photos_count}})</a>
                                 @endif
@@ -50,6 +51,15 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td colspan="5">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2 d-flex justify-content-center">
+                                {{$albums->links('vendor.pagination.bootstrap-4')}}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </form>

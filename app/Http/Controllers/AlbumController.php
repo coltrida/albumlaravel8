@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
+use App\Models\Photo;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +20,7 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = Album::withCount('photos')->latest()->get();
+        $albums = Album::withCount('photos')->latest()->paginate(env('IMG_PER_PAGE'));
         return view('album.index', compact('albums'));
     }
 
@@ -36,10 +38,10 @@ class AlbumController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param AlbumRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(AlbumRequest $request)
     {
         $album = new Album();
         $album->album_name = $request->album_name;
@@ -64,8 +66,9 @@ class AlbumController extends Controller
      */
     public function show(Album $album)
     {
-        $alb = Album::with('photos')->find($album->id);
-        return view('photo.albumImages', compact('alb'));
+    //  $alb = Album::with('photos')->find($album->id);
+        $images = Photo::latest()->wherealbumId($album->id)->paginate(env('IMG_PER_PAGE'));
+        return view('photo.albumImages', compact('album', 'images'));
     }
 
     /**
@@ -82,11 +85,11 @@ class AlbumController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param AlbumRequest $request
      * @param Album $album
      * @return RedirectResponse
      */
-    public function update(Request $request, Album $album)
+    public function update(AlbumRequest $request, Album $album)
     {
         $album->album_name = $request->input('album_name');
         $album->description = $request->input('description');
@@ -126,7 +129,7 @@ class AlbumController extends Controller
         if ($request->hasFile('album_thumb')) {
             $file = $request->file('album_thumb');
             $filename = $album->id . '.' . $file->extension();
-            $filenameWithPath = $file->storeAs(env('IMG_DIR'), $filename);
+            $filenameWithPath = $file->storeAs(env('ALBUM_THUMB_DIR'), $filename);
             $album->album_thumb = $filenameWithPath;
         }
     }

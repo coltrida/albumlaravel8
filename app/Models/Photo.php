@@ -35,4 +35,18 @@ class Photo extends Model
     use HasFactory;
 
     protected $guarded=[];
+
+    public function getPathAttribute()
+    {
+        $url = $this->img_path;
+        if (stristr($this->img_path, 'http') === false){
+            $url = 'storage/'.$this->img_path;
+        }
+        return $url;
+    }
+
+    public function album()
+    {
+        $this->belongsTo(Album::class);
+    }
 }

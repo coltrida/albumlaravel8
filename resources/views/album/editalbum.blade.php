@@ -4,6 +4,10 @@
 @section('content')
     <div class="container" style="margin: 40px auto">
         <h2>Edit Album - {{$album->album_name}}</h2>
+
+        @include('partials.inputError')
+
+        
         <form method="POST" action="{{route('albums.update', $album->id)}}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
