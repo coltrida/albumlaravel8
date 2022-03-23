@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Album;
-use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AlbumRequest extends FormRequest
+class PhotoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,17 +24,14 @@ class AlbumRequest extends FormRequest
      */
     public function rules()
     {
-        $albumId = $this->route()->album ? $this->route()->album->id : null;
+        $photoId = $this->route()->photo ? $this->route()->photo : null;
         $ret = [
-            'album_name' => ['required'],
+            'name' => ['required', Rule::unique('photos')->ignore($photoId)],
             'description' => 'required',
         ];
 
-        if ($albumId){
-            $ret['album_name'][] = Rule::unique('albums')->ignore($albumId);
-        } else {
-            $ret['album_thumb'] = 'bail|required|image';
-            $ret['album_name'][] = Rule::unique('albums');
+        if (!$photoId){
+            $ret['img_path'] = 'bail|required|image';
         }
 
         return $ret;
@@ -45,10 +40,10 @@ class AlbumRequest extends FormRequest
     public function messages()
     {
         return [
-            'album_name.required' => 'Il campo album name è obbligatorio',
-            'album_name.unique' => 'Il campo album name è già presente',
+            'name.required' => 'Il campo name è obbligatorio',
+            'name.unique' => 'Il campo name è già presente',
             'description.required' => 'Il campo description è obbligatorio',
-            'album_thumb.required' => 'Il campo immagine name è obbligatorio',
+            'img_path.required' => 'Il campo immagine è obbligatorio',
         ];
     }
 }

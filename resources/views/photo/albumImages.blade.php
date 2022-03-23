@@ -37,10 +37,12 @@
                         <td>{{$image->name}}</td>
                         <td><img width="200" src="{{asset($image->path)}}" alt=""></td>
                         <td>
-                            <div class="d-flex">
-                                <a class="btn btn-danger" href="{{route('photos.destroy', $image->id)}}">Delete</a>
-                                <a class="btn btn-primary" href="{{route('photos.edit', $image->id)}}">Update</a>
-                            </div>
+                            <a title="elimina immagine" class="btn btn-danger" href="{{route('photos.destroy', $image->id)}}">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <a title="modifica immagine" class="btn btn-primary" href="{{route('photos.edit', $image->id)}}">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
                         </td>
                     </tr>
                 @empty
@@ -73,7 +75,7 @@
             $('tbody').on('click', 'a.btn-danger', function (ele) {
                 ele.preventDefault();
                 let urlAlbum = ele.target.href;    //let url = $(this).attr('href');
-                let tr = ele.target.parentNode.parentNode.parentNode;
+                let tr = ele.target.parentNode.parentNode;
                 $.ajax(urlAlbum,
                     {
                         method: 'DELETE',

@@ -12,6 +12,7 @@
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <!-- Favicons -->
     <meta name="theme-color" content="#7952b3">
 
@@ -46,15 +47,17 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{route('index')}}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('albums.index')}}">Album</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('photos.index')}}">Photos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('users')}}">Utenti</a>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('albums.index')}}">Album</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('photos.index')}}">Photos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('users')}}">Utenti</a>
+                    </li>
+                @endauth
             </ul>
 
             <div class="d-flex justify-end" style="margin-right: 150px">

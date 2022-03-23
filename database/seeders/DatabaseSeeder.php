@@ -33,7 +33,8 @@ class DatabaseSeeder extends Seeder
             )
         )->create();
 
-        User::create([
+        $user = User::find(1);
+        $user->update([
             'name' => 'cacao',
             'email' => 'cacao@cacao.it',
             'email_verified_at' => now(),

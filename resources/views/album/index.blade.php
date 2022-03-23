@@ -15,44 +15,63 @@
             <div class="col"><h2>Album</h2></div>
             <div class="col"><a href="{{route('albums.create')}}" class="btn btn-primary">Nuovo</a></div>
         </div>
-
-        <form>
-            <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
                     <th scope="col">Nome</th>
                     <th scope="col">thumb</th>
+                    <th scope="col">Autor</th>
                     <th scope="col">Descrizione</th>
-                    <th scope="col">user_id</th>
+                    <th scope="col">Data Creaz</th>
                     <th scope="col">Azioni</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($albums as $album)
-                    <tr class="align-middle">
+                    <tr class="align-middle" id="tr{{$album->id}}">
                         <td>{{$album->album_name}} ( {{$album->id}} )</td>
                         <td>
                             @if($album->album_thumb)
                                 <img width="200" src="{{asset($album->path)}}" alt="">
                             @endif
                         </td>
+                        <td>{{$album->user->name}}</td>
                         <td>{{$album->description}}</td>
-                        <td>{{$album->user_id}}</td>
+                        <td width="100">{{$album->created_at->format('d-m-Y')}}</td>
                         <td width="350">
-                            <div class="d-flex">
-                                <a class="btn btn-danger" href="{{route('albums.destroy', $album->id)}}">Delete</a>
-                                <a class="btn btn-warning" href="{{route('albums.edit', $album->id)}}">Update</a>
-                                <a class="btn btn-primary" href="{{route('photos.create', $album->id)}}">New</a>
-                                @if($album->photos_count)
-                                    <a class="btn btn-success" href="{{route('albums.show', $album->id)}}">Images ({{$album->photos_count}})</a>
-                                @endif
+                            <div class="row p-0 m-0">
+                                <div class="col-2 p-0">
+                                    <form id="form{{$album->id}}" action="{{route('albums.destroy', $album->id)}}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button id="{{$album->id}}" title="elimina album" class="btn btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-2 p-0">
+                                    <a title="modifica album" class="btn btn-warning" href="{{route('albums.edit', $album->id)}}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2 p-0">
+                                    <a title="aggiungi foto all'album" class="btn btn-primary" href="{{route('photos.create', $album->id)}}">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-3 p-0">
+                                    @if($album->photos_count)
+                                        <a title="mostra foto" class="btn btn-success" href="{{route('albums.show', $album->id)}}">
+                                            <i class="bi bi-image"></i> ({{$album->photos_count}})
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                         </td>
                     </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         <div class="row">
                             <div class="col-md-8 offset-md-2 d-flex justify-content-center">
                                 {{$albums->links('vendor.pagination.bootstrap-4')}}
@@ -62,7 +81,6 @@
                 </tr>
                 </tbody>
             </table>
-        </form>
     </div>
 @endsection
 
@@ -72,19 +90,21 @@
         $('document').ready(function () {
             $('div.alert').fadeOut(4000);
 
-            $('tbody').on('click', 'a.btn-danger', function (ele) {
-                ele.preventDefault();
-                let urlAlbum = ele.target.href;    //let url = $(this).attr('href');
-                let tr = ele.target.parentNode.parentNode.parentNode;
+            $('tbody').on('click', 'button.btn-danger2', function (evt) {
+                evt.preventDefault();
+                let idPulsante = evt.currentTarget.id;
+                let form = $('#form' + idPulsante);
+                let urlAlbum = form.attr('action');
+                let tr = $('#tr' + idPulsante);
                 $.ajax(urlAlbum,
                     {
                         method: 'DELETE',
                         data: {
-                            '_token': $('#_token').val(),
+                            '_token': '{{csrf_token()}}',
                         },
                         complete: function (resp) {
                             if (resp.responseText == 1) {
-                                tr.parentNode.removeChild(tr);
+                                tr.remove();
                             } else {
                                 alert('problemi nella cancellazione')
                             }

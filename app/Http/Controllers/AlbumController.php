@@ -9,10 +9,17 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Auth;
 
 
 class AlbumController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Album::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +27,8 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = Album::withCount('photos')->latest()->paginate(env('IMG_PER_PAGE'));
+        $albums = Album::withCount('photos')->
+            where('user_id', Auth::id())->latest()->paginate(env('IMG_PER_PAGE'));
         return view('album.index', compact('albums'));
     }
 
@@ -46,7 +54,7 @@ class AlbumController extends Controller
         $album = new Album();
         $album->album_name = $request->album_name;
         $album->description = $request->description;
-        $album->user_id = \Auth::user()->id;
+        $album->user_id = Auth::id();
 
         $this->processFile($request, $album);
 
@@ -79,6 +87,9 @@ class AlbumController extends Controller
      */
     public function edit(Album $album)
     {
+        /*if ($album->user_id !== Auth::id()){
+            abort(401);
+        }*/
         return view('album.editalbum', compact('album'));
     }
 
@@ -104,12 +115,7 @@ class AlbumController extends Controller
         return redirect()->route('albums.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Album $album
-     * @return bool
-     */
+
     public function destroy(Album $album)
     {
         $thumbNail = $album->album_thumb;
@@ -117,7 +123,14 @@ class AlbumController extends Controller
         if ($res && $thumbNail && \Storage::exists($thumbNail)){
             \Storage::delete($thumbNail);
         }
-        return $res;
+        if (request()->ajax()) {
+            return $res;
+        }
+        $message = $res ? "Album con id $album->id eliminato" : 'Album non aggiornato';
+        $tipo = $res ? 'success' : 'danger';
+        session()->flash('message', $message);
+        session()->flash('tipo', $tipo);
+        return redirect()->route('albums.index');
     }
 
     /**
