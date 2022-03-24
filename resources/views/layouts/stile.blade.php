@@ -47,12 +47,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{route('index')}}">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{route('gallery.album')}}">Album Pubblici</a>
+                </li>
                 @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('albums.index')}}">Album</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('photos.index')}}">Photos</a>
+                        <a class="nav-link" href="{{route('albums.index')}}">Album Personali</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('users')}}">Utenti</a>

@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Photo[] $photos
  * @property-read int|null $photos_count
  * @method static \Database\Factories\AlbumFactory factory(...$parameters)
+ * @property-read mixed $path
+ * @property-read \App\Models\User $user
  */
 class Album extends Model
 {
@@ -55,5 +57,10 @@ class Album extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

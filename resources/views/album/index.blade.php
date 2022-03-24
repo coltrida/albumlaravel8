@@ -90,7 +90,7 @@
         $('document').ready(function () {
             $('div.alert').fadeOut(4000);
 
-            $('tbody').on('click', 'button.btn-danger2', function (evt) {
+            $('tbody').on('click', 'button.btn-danger', function (evt) {
                 evt.preventDefault();
                 let idPulsante = evt.currentTarget.id;
                 let form = $('#form' + idPulsante);

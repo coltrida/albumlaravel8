@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Album;
+use App\Models\AlbumCategory;
+use App\Models\Category;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -26,6 +28,10 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Album::truncate();
         Photo::truncate();
+        Category::truncate();
+        AlbumCategory::truncate();
+
+
 
         User::factory(20)->has(
             Album::factory(10)->has(
@@ -43,5 +49,8 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        $this->call(CategorySeeder::class);
+        $this->call(AlbumCategorySeeder::class);
     }
 }

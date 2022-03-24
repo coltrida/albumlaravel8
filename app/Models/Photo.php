@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $deleted_at
  * @method static \Database\Factories\PhotoFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Photo whereDeletedAt($value)
+ * @property-read \App\Models\Album $album
+ * @property-read mixed $path
  */
 class Photo extends Model
 {
