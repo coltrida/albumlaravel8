@@ -12,7 +12,8 @@ class GalleryController extends Controller
     public function index()
     {
         $albums = Album::with('categories')->latest()->paginate(10);
-        return view('gallery.albums', compact('albums'));
+        $category_id = null;
+        return view('gallery.albums', compact('albums', 'category_id'));
     }
 
     public function showAlbumImages($album)
@@ -24,6 +25,7 @@ class GalleryController extends Controller
     public function showCategoryAlbums(Category $category)
     {
         $albums = $category->albums()->with('categories')->latest()->paginate();
-        return view('gallery.albums', compact('albums'));
+        $category_id = $category->id;
+        return view('gallery.albums', compact('albums', 'category_id'));
     }
 }

@@ -33,6 +33,10 @@
         }
     </style>
 
+    <script>
+        window.Laravel =@json( ['csrfToken' => csrf_token()] )
+    </script>
+
 </head>
 <body>
 
@@ -56,6 +60,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('users')}}">Utenti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('categories.index')}}">Categorie</a>
                     </li>
                 @endauth
             </ul>

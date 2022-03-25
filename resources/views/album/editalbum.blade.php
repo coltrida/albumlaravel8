@@ -7,7 +7,7 @@
 
         @include('partials.inputError')
 
-        
+
         <form method="POST" action="{{route('albums.update', $album->id)}}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
@@ -18,6 +18,8 @@
             </div>
 
             @include('partials.fileUpload')
+
+            @include('partials.category_combo')
 
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>

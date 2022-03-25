@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Database\Factories\AlbumFactory factory(...$parameters)
  * @property-read mixed $path
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
  */
 class Album extends Model
 {
@@ -61,6 +63,6 @@ class Album extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class)->withTimestamps();
     }
 }

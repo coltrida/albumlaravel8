@@ -11,8 +11,10 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::resource('albums', AlbumController::class);
     Route::resource('photos', PhotoController::class);
+    Route::resource('categories', CategoryController::class);
     Route::get('/users', [HomeController::class, 'users'])->name('users');
     Route::get('photos/create/{album}', [PhotoController::class, 'create'])->name('photos.create');
+    Route::post('filtraAlbum', [AlbumController::class, 'filtra'])->name('albums.filtra');
 });
 
 Route::get('/dashboard', function () {
@@ -25,8 +27,5 @@ Route::group(['prefix' => 'gallery'], function (){
     Route::get('album/{album}/images', [GalleryController::class, 'showAlbumImages'])->name('gallery.album.images');
     Route::get('categories/{category}/albums', [GalleryController::class, 'showCategoryAlbums'])->name('gallery.categories.albums');
 });
-
-Route::resource('category', CategoryController::class);
-
 
 require __DIR__.'/auth.php';

@@ -18,6 +18,8 @@
 
             @include('partials.fileUpload')
 
+            @include('partials.category_combo')
+
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>
                 <input type="text" class="form-control" id="description" name="description" aria-describedby="emailHelp"

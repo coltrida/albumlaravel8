@@ -38,6 +38,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Album[] $albums
  * @property-read int|null $albums_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
  */
 class User extends Authenticatable
 {
@@ -76,5 +78,10 @@ class User extends Authenticatable
     public function albums()
     {
         return $this->hasMany(Album::class);
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class)->withCount('albums')->orderBy('category_name');
     }
 }

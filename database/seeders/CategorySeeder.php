@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,8 +21,10 @@ class CategorySeeder extends Seeder
         ];
 
         foreach ($cats as $cat){
+            $user_id = User::inRandomOrder()->pluck('id')->first();
             Category::create([
-                'category_name' => $cat
+                'category_name' => $cat,
+                'user_id' => $user_id
             ]);
         }
     }

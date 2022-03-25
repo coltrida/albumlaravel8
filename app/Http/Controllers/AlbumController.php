@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
+use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -27,9 +28,29 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = Album::withCount('photos')->
-            where('user_id', Auth::id())->latest()->paginate(env('IMG_PER_PAGE'));
-        return view('album.index', compact('albums'));
+        $selectedCategory = null;
+        $albums = Album::withCount('photos')
+            ->where('user_id', Auth::id())->latest()->paginate(env('IMG_PER_PAGE'));
+        $categories = auth()->user()->categories;
+        return view('album.index', compact('albums', 'categories', 'selectedCategory'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Factory|View
+     */
+    public function filtra(Request $request)
+    {
+        $selectedCategory = $request->category_id;
+        $albums = Album::withCount('photos')
+            ->where('user_id', Auth::id())
+            ->whereHas('categories', function ($q) use($selectedCategory){
+                $q->where('category_id', $selectedCategory);
+            })
+            ->latest()->paginate(env('IMG_PER_PAGE'));
+        $categories = auth()->user()->categories;
+        return view('album.index', compact('albums', 'categories', 'selectedCategory'));
     }
 
     /**
@@ -40,7 +61,9 @@ class AlbumController extends Controller
     public function create()
     {
         $album = new Album();
-        return view('album.createalbum', compact('album'));
+        $categories = Category::orderBy('category_name')->get();
+        $selectedCategories = [];
+        return view('album.createalbum', compact('album', 'categories', 'selectedCategories'));
     }
 
     /**
@@ -55,10 +78,14 @@ class AlbumController extends Controller
         $album->album_name = $request->album_name;
         $album->description = $request->description;
         $album->user_id = Auth::id();
-
         $this->processFile($request, $album);
 
         $res = $album->save();
+
+        if ($res && $request->has('categories')){
+            $album->categories()->attach($request->categories);
+        }
+
         $message = $res ? "Album creato con succeesso" : 'Album non creato';
         $tipo = $res ? 'success' : 'danger';
         session()->flash('message', $message);
@@ -90,7 +117,9 @@ class AlbumController extends Controller
         /*if ($album->user_id !== Auth::id()){
             abort(401);
         }*/
-        return view('album.editalbum', compact('album'));
+        $categories = Category::orderBy('category_name')->get();
+        $selectedCategories = $album->categories()->get()->pluck('id')->toArray();
+        return view('album.editalbum', compact('album', 'categories', 'selectedCategories'));
     }
 
     /**
@@ -108,6 +137,11 @@ class AlbumController extends Controller
         $this->processFile($request, $album);
 
         $res = $album->save();
+
+        if ($res && $request->has('categories')){
+            $album->categories()->sync($request->categories);
+        }
+
         $message = $res ? "Album con id $album->id modificato" : 'Album non aggiornato';
         $tipo = $res ? 'success' : 'danger';
         session()->flash('message', $message);

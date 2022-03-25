@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="container">
-        <h2>Albums</h2>
+        <h2>Albums Pubblici</h2>
         <div class="row">
             @foreach($albums as $album)
                 <div class="col-3">
@@ -20,7 +20,11 @@
                             <p class="card-text">{{$album->created_at->diffForHumans()}}</p>
                             <p class="card-text">
                                 @foreach($album->categories as $cat)
-                                    <a href="{{route('gallery.categories.albums', $cat->id)}}">{{$cat->category_name}}</a>
+                                    @if($cat->id !== $category_id)
+                                        <a href="{{route('gallery.categories.albums', $cat->id)}}">{{$cat->category_name}}</a>
+                                    @else
+                                        {{$cat->category_name}}
+                                    @endif
                                 @endforeach
                             </p>
                         </div>
