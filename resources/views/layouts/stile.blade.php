@@ -76,6 +76,9 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li>
+                                    <a href="{{route('admin')}}" class="dropdown-item">
+                                        dashboard
+                                    </a>
                                     <a class="dropdown-item" href="#">
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf

@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Album[] $albums
  * @property-read int|null $albums_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUserId($value)
+ * @property-read \App\Models\User $user
+ * @method static Builder|Category getCategoriesByUserId(\App\Models\User $user)
  */
 class Category extends Model
 {

@@ -43,6 +43,18 @@ class DatabaseSeeder extends Seeder
         $user->update([
             'name' => 'cacao',
             'email' => 'cacao@cacao.it',
+            'user_role' => 'admin',
+            'email_verified_at' => now(),
+            'password' => \Hash::make('123456'),
+            'remember_token' => 'sdafIOKKHy',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        $user = User::find(2);
+        $user->update([
+            'name' => 'cacao2',
+            'email' => 'cacao2@cacao.it',
+            'user_role' => 'user',
             'email_verified_at' => now(),
             'password' => \Hash::make('123456'),
             'remember_token' => 'sdafIOKKHy',
