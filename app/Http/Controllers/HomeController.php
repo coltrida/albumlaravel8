@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewAlbumCreated;
 use App\Mail\TestEmail;
 use App\Mail\TestMd;
+use App\Models\Album;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,6 +42,13 @@ class HomeController extends Controller
     {
         $user = User::find(rand(1, 10));
         \Mail::to('coltrida@gmail.com')->send(new TestMd($user));
+        return redirect()->route('index');
+    }
+
+    public function testEvent()
+    {
+        $album = Album::find(rand(1, 10));
+        event(new NewAlbumCreated($album));
         return redirect()->route('index');
     }
 }

@@ -60,6 +60,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('testMailMd')}}">Test Mail Md</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('testEvent')}}">Test event</a>
+                </li>
                 @auth
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('albums.index')}}">Album Personali</a>

@@ -9,6 +9,7 @@ use App\Http\Controllers\PhotoController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/testMail', [HomeController::class, 'testMail'])->name('testMail');
 Route::get('/testMailMd', [HomeController::class, 'testMailMd'])->name('testMailMd');
+Route::get('/testEvent', [HomeController::class, 'testEvent'])->name('testEvent');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::resource('albums', AlbumController::class);
