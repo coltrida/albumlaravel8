@@ -33,21 +33,21 @@ class HomeController extends Controller
 
     public function testMail()
     {
-        $user = User::find(rand(1, 10));
+        $user = User::find(1);
         \Mail::to('coltrida@gmail.com')->send(new TestEmail($user));
         return redirect()->route('index');
     }
 
     public function testMailMd()
     {
-        $user = User::find(rand(1, 10));
+        $user = User::find(1);
         \Mail::to('coltrida@gmail.com')->send(new TestMd($user));
         return redirect()->route('index');
     }
 
     public function testEvent()
     {
-        $album = Album::find(rand(1, 10));
+        $album = Album::find(1);
         event(new NewAlbumCreated($album));
         return redirect()->route('index');
     }
