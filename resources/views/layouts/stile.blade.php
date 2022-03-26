@@ -54,6 +54,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{route('gallery.album')}}">Album Pubblici</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('testMail')}}">Test Mail</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('testMailMd')}}">Test Mail Md</a>
+                </li>
                 @auth
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('albums.index')}}">Album Personali</a>

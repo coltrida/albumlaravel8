@@ -7,6 +7,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PhotoController;
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/testMail', [HomeController::class, 'testMail'])->name('testMail');
+Route::get('/testMailMd', [HomeController::class, 'testMailMd'])->name('testMailMd');
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::resource('albums', AlbumController::class);
@@ -16,10 +18,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('photos/create/{album}', [PhotoController::class, 'create'])->name('photos.create');
     Route::post('filtraAlbum', [AlbumController::class, 'filtra'])->name('albums.filtra');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 Route::group(['prefix' => 'gallery'], function (){
     Route::get('/', [GalleryController::class, 'index']);

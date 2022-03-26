@@ -24,7 +24,7 @@
             <tr>
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
-                <td>{{$user->role}}</td>
+                <td>{{$user->user_role}}</td>
                 <td>{{$user->created_at->format('d-m-Y H:i')}}</td>
                 <td>{{$user->deleted_at ? $user->deleted_at->format('d-m-Y H:i') : null}}</td>
                 <td>

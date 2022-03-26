@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TestEmail;
+use App\Mail\TestMd;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -24,5 +27,19 @@ class HomeController extends Controller
         //$users = User::with('albums')->whereDoesntHave('albums')->get();
 
         return view('user.index', compact('users'));
+    }
+
+    public function testMail()
+    {
+        $user = User::find(rand(1, 10));
+        \Mail::to('coltrida@gmail.com')->send(new TestEmail($user));
+        return redirect()->route('index');
+    }
+
+    public function testMailMd()
+    {
+        $user = User::find(rand(1, 10));
+        \Mail::to('coltrida@gmail.com')->send(new TestMd($user));
+        return redirect()->route('index');
     }
 }
