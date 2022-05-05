@@ -78,8 +78,9 @@ class AlbumController extends Controller
         $album->album_name = $request->album_name;
         $album->description = $request->description;
         $album->user_id = Auth::id();
+        $album->album_thumb = ' ';
+        $album->save();
         $this->processFile($request, $album);
-
         $res = $album->save();
 
         if ($res && $request->has('categories')){
@@ -171,7 +172,7 @@ class AlbumController extends Controller
      * @param Request $request
      * @param Album $album
      */
-    private function processFile(Request $request, Album &$album): void
+    private function processFile(Request $request, Album $album): void
     {
         if ($request->hasFile('album_thumb')) {
             $file = $request->file('album_thumb');

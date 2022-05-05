@@ -49,10 +49,11 @@ class PhotoController extends Controller
         $photo->name = $request->name;
         $photo->description = $request->description;
         $photo->album_id = $request->album_id;
-
+        $photo->img_path = ' ';
+        $photo->save();
         $this->processFile($photo, $request);
-
         $res = $photo->save();
+
         $message = $res ? "Photo creato con succeesso" : 'Photo non creato';
         $tipo = $res ? 'success' : 'danger';
         session()->flash('message', $message);
@@ -125,7 +126,7 @@ class PhotoController extends Controller
      * @param Request $request
      * @param Photo $photo
      */
-    private function processFile(Photo &$photo, Request $request): void
+    private function processFile(Photo $photo, Request $request): void
     {
         if ($request->hasFile('img_path')) {
             $file = $request->file('img_path');
